@@ -160,6 +160,20 @@ function viewEmployeesByDepartment() {
             value: id
         }));
 
-        
-    })
+        prompt([
+            {
+                type: "list",
+                name: "departmentId",
+                message: "Which department would you like to see employees for?",
+                choices: departmentChoices
+            }
+        ])
+        .then(res => db.findAllEmployeesByDepartment(res.departmentId))
+        .then(([rows]) => {
+            let employees = rows;
+            console.log("\n");
+            console.table(employees);
+        })
+        .then(() => loadMainPrompts())
+    });
 }
