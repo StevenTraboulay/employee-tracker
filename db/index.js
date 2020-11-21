@@ -108,20 +108,23 @@ class DB {
 
   //find all employees in a department, join with roles to display role titles
   findAllEmployeesByDepartment(departmentId) {
-      return this.connection.promise().query(
-          "SELECT employee.id, employe.first_name, employee.last_name, role.title FROM employee LEFT JOIN on employee.role_id = role.id LEFT JOIN department department on role.department_id = department.id WHERE department.id = ?;",
+    return this.connection
+      .promise()
+      .query(
+        "SELECT employee.id, employe.first_name, employee.last_name, role.title FROM employee LEFT JOIN on employee.role_id = role.id LEFT JOIN department department on role.department_id = department.id WHERE department.id = ?;",
         departmentId
-          );
+      );
   }
 
   //find all employees by manager, join with department and roles to display titles and department names
   findAllEmployeesByManager(managerId) {
-      return this.connection.promise().query(
-          "SELECT employee.id, employee.first_name, employe.last_name, department.name ASdepartment, role.title FROM employee LEFT JOIN role on role.id = employee.role_id LEFT JOIN department ON department.id = role.departmentid = role.department_id WHERE manager_ud = ?;",
+    return this.connection
+      .promise()
+      .query(
+        "SELECT employee.id, employee.first_name, employe.last_name, department.name ASdepartment, role.title FROM employee LEFT JOIN role on role.id = employee.role_id LEFT JOIN department ON department.id = role.departmentid = role.department_id WHERE manager_ud = ?;",
         managerId
-          );
+      );
   }
-
 }
 
 module.exports = new DB(connection);
