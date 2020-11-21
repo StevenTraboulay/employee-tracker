@@ -7,7 +7,7 @@ require("console.table");
 init();
 
 //display logo text, load main prompts
-function init();{
+function init() {
 const logoText = logo({ name: "Employee Manager"}).render();
 
 console.log(logoText);
