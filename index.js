@@ -177,3 +177,60 @@ function viewEmployeesByDepartment() {
         .then(() => loadMainPrompts())
     });
 }
+
+
+//view all employees reporting to a certain manager
+function ViewEmployeesByManager() {
+    db.findAllEmployees()
+    .then(([rows]) => {
+    let managers = rows;
+    const managerChoices = managers.map(({ id, first_name, last_name}) => ({
+        name: `${first_name} ${last_name}`,
+        value: id
+    }));
+
+    prompt ([
+        {
+            type: "list",
+            name: "managerId",
+            message: "Which employee do you want to see direct reports for?",
+            choices: managerChoices
+        }
+    ])
+    .then(res => db.findAllEmployeesByManager(res.managerId))
+    .then(([rows]) => {
+        let employees = rows;
+        console.log("\n");
+        if (employees.length === 0) {
+            console.log("The selected employee has no directed reports");
+        } else {
+            console.table(employees);
+        }
+    })
+    .then(() => loadMainPrompts())
+    });
+}
+
+//delete or remove employee
+function removeEmployee() {
+    db.findAllEmployees()
+    .then(([rows]) => {
+        let employees = rows;
+        const employeeChoices = employees.map(({ id, first_name, last_name }) => ({
+            name: `${first_name} ${last_name}`,
+            value: id
+        }));
+        
+        prompt([
+            {
+                type: "list",
+                name: "employeeId",
+                message: "Which employee would you like to delete?",
+                choices: employeeChoices
+            }
+        ])
+        .then(res => db.removeEmployee(res.employeeId))
+        .then(() => console.log ("Removed employee from teh database"))
+        .then(() => loadMainPrompts())
+    })
+}
